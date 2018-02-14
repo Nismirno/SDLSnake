@@ -21,9 +21,10 @@ Window::~Window() {
 
 bool Window::init() {
 	m_window = SDL_CreateWindow("Snake",
-								SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
-								SCREEN_WIDTH, SCREEN_HEIGHT,
-								SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE);
+	                            SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
+	                            SCREEN_WIDTH, SCREEN_HEIGHT,
+	                            SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE);
+
 	if (m_window != NULL) {
 		m_mouseFocus = true;
 		m_keyboardFocus = true;
@@ -48,17 +49,17 @@ void Window::handleEvent(SDL_Event &e) {
 		switch (e.window.event) {
 		// Get new dimensions and repaint on window size change
 		case SDL_WINDOWEVENT_SIZE_CHANGED:
-				m_width = e.window.data1;
-				m_height = e.window.data2;
-				SDL_RenderPresent(m_renderer);
-				break;
+			m_width = e.window.data1;
+			m_height = e.window.data2;
+			SDL_RenderPresent(m_renderer);
+			break;
 
-		// Repaint on exposure 
+		// Repaint on exposure
 		case  SDL_WINDOWEVENT_EXPOSED:
 			SDL_RenderPresent(m_renderer);
 			break;
-		
-		// Mouse entered window 
+
+		// Mouse entered window
 		case SDL_WINDOWEVENT_ENTER:
 			m_mouseFocus = true;
 			break;
@@ -77,7 +78,7 @@ void Window::handleEvent(SDL_Event &e) {
 		case SDL_WINDOWEVENT_FOCUS_LOST:
 			m_keyboardFocus = false;
 			break;
-			
+
 		// Window minimized
 		case SDL_WINDOWEVENT_MINIMIZED:
 			m_isMinimized = true;
@@ -147,6 +148,6 @@ bool Window::isMinimized() const {
 }
 
 
-SDL_Renderer* Window::renderer(){
+SDL_Renderer *Window::renderer() {
 	return m_renderer;
 }

@@ -33,12 +33,12 @@ public:
 	bool hasKeyboardFocus() const;
 	bool isMinimized() const;
 
-	SDL_Renderer* renderer();
+	SDL_Renderer *renderer();
 
 private:
 	// Window data
-	SDL_Window* m_window;
-	SDL_Renderer* m_renderer;
+	SDL_Window *m_window;
+	SDL_Renderer *m_renderer;
 
 	// Window dimensions
 	int m_width;

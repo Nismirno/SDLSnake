@@ -16,6 +16,7 @@ bool SnakeGame::init() {
 
 	// Initialize PNG loading
 	int imgFlags = IMG_INIT_PNG;
+
 	if (!(IMG_Init(imgFlags)) & imgFlags) {
 		printf("SDL_image could not initialize! SDL Error: %s\n", IMG_GetError());
 		return false;
@@ -45,7 +46,6 @@ bool SnakeGame::init() {
 
 bool SnakeGame::execute() {
 	bool quit = false;
-
 	SDL_Event e;
 
 	while (!quit) {
@@ -64,7 +64,6 @@ bool SnakeGame::execute() {
 		}
 
 		update();
-
 		SDL_RenderPresent(m_gameWindow.renderer());
 	}
 
@@ -74,7 +73,6 @@ bool SnakeGame::execute() {
 
 bool SnakeGame::finalize() {
 	m_gameWindow.free();
-
 	return true;
 }
 
