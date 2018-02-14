@@ -1,11 +1,12 @@
 #pragma once
-#ifndef _SNAKE_H
-#define _SNAKE_H
+#ifndef _SNAKEGAME_H
+#define _SNAKEGAME_H
 
 #include <stdio.h>
 #include <SDL.h>
 #include <SDL_image.h>
 #include "Window.h"
+#include "Snake.h"
 //#include <SDL_opengl.h>
 //#include <gl/GLU.h>
 
@@ -24,6 +25,8 @@ public:
 	// Start up SDL and create window
 	bool init();
 
+	// Load media files
+
 	// Execute the game
 	bool execute();
 
@@ -36,6 +39,9 @@ private:
 
 	// Update screen
 	void update();
+
+	// Clear screen
+	void clearScreen();
 
 	// Resize screen
 	void resize(int width, int height);

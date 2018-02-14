@@ -3,9 +3,11 @@
 
 SnakeGame::SnakeGame() {}
 
+
 SnakeGame::~SnakeGame() {
 	m_gameWindow.free();
 }
+
 
 bool SnakeGame::init() {
 	// Initialize SDL
@@ -45,8 +47,11 @@ bool SnakeGame::init() {
 
 
 bool SnakeGame::execute() {
+	SDL_Renderer *renderer = m_gameWindow.renderer();
 	bool quit = false;
 	SDL_Event e;
+	Snake snake(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2);
+	snake.loadTexture("media/body.png", renderer);
 
 	while (!quit) {
 		while (SDL_PollEvent(&e)) {
@@ -58,13 +63,15 @@ bool SnakeGame::execute() {
 				quit = true;
 			}
 
-			if (eventType == SDL_WINDOWEVENT_RESIZED) {
-				resize(e.window.data1, e.window.data2);
-			}
+			m_gameWindow.handleEvent(e);
+			snake.handleEvent(e);
 		}
 
-		update();
-		SDL_RenderPresent(m_gameWindow.renderer());
+		/* TODO: Add simple timer to move snake periodically */
+		snake.move();
+		clearScreen();
+		snake.render(renderer);
+		SDL_RenderPresent(renderer);
 	}
 
 	return true;
@@ -77,9 +84,10 @@ bool SnakeGame::finalize() {
 }
 
 
-void SnakeGame::update() {
-	SDL_SetRenderDrawColor(m_gameWindow.renderer(), 0xFF, 0xFF, 0xFF, 0xFF);
-	SDL_RenderClear(m_gameWindow.renderer());
+void SnakeGame::clearScreen() {
+	SDL_Renderer *renderer = m_gameWindow.renderer();
+	SDL_SetRenderDrawColor(renderer, 0xFF, 0xFF, 0xFF, 0xFF);
+	SDL_RenderClear(renderer);
 }
 
 
