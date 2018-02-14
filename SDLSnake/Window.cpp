@@ -21,9 +21,9 @@ Window::~Window() {
 
 bool Window::init() {
 	m_window = SDL_CreateWindow("Snake",
-															SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
-															SCREEN_WIDTH, SCREEN_HEIGHT,
-															SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE);
+								SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
+								SCREEN_WIDTH, SCREEN_HEIGHT,
+								SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE);
 	if (m_window != NULL) {
 		m_mouseFocus = true;
 		m_keyboardFocus = true;
