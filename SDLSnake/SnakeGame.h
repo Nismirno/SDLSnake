@@ -7,6 +7,7 @@
 #include <SDL_image.h>
 #include "Window.h"
 #include "Snake.h"
+#include "Timer.h"
 //#include <SDL_opengl.h>
 //#include <gl/GLU.h>
 
@@ -36,9 +37,6 @@ public:
 private:
 	// Game window
 	Window m_gameWindow;
-
-	// Update screen
-	void update();
 
 	// Clear screen
 	void clearScreen();

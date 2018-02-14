@@ -52,6 +52,8 @@ bool SnakeGame::execute() {
 	SDL_Event e;
 	Snake snake(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2);
 	snake.loadTexture("media/body.png", renderer);
+	Food food;
+	food.loadTexture("media/food.png", renderer);
 
 	while (!quit) {
 		while (SDL_PollEvent(&e)) {
@@ -67,10 +69,14 @@ bool SnakeGame::execute() {
 			snake.handleEvent(e);
 		}
 
-		/* TODO: Add simple timer to move snake periodically */
-		snake.move();
+		if (!food.isSpawned()) {
+			food.spawn();
+		}
+
+		snake.move(food);
 		clearScreen();
 		snake.render(renderer);
+		food.render(renderer);
 		SDL_RenderPresent(renderer);
 	}
 
