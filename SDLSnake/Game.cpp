@@ -1,15 +1,15 @@
-#include "SnakeGame.h"
+#include "Game.h"
+#include <Windows.h>
+
+Game::Game() {}
 
 
-SnakeGame::SnakeGame() {}
-
-
-SnakeGame::~SnakeGame() {
+Game::~Game() {
 	m_gameWindow.free();
 }
 
 
-bool SnakeGame::init() {
+bool Game::init() {
 	// Initialize SDL
 	if (SDL_Init(SDL_INIT_VIDEO) < 0) {
 		printf("SDL could not initialize! SDL Error: %s\n", SDL_GetError());
@@ -46,12 +46,14 @@ bool SnakeGame::init() {
 }
 
 
-bool SnakeGame::execute() {
+bool Game::execute() {
 	SDL_Renderer *renderer = m_gameWindow.renderer();
 	bool quit = false;
 	SDL_Event e;
-	Snake snake(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2);
-	snake.loadTexture("media/body.png", renderer);
+	Snake *snake = new Snake();
+	snake->loadHeadTexture("media/body.png", renderer);
+	snake->loadBodyTexture("media/body.png", renderer);
+	snake->spawn(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2);
 	Food food;
 	food.loadTexture("media/food.png", renderer);
 
@@ -66,17 +68,13 @@ bool SnakeGame::execute() {
 			}
 
 			m_gameWindow.handleEvent(e);
-			snake.handleEvent(e);
+			snake->handleEvent(e);
 		}
 
-		if (!food.isSpawned()) {
-			food.spawn();
-		}
-
-		snake.move(food);
+		snake->move();
 		clearScreen();
-		snake.render(renderer);
-		food.render(renderer);
+		snake->render(renderer);
+		//		food.render(renderer);
 		SDL_RenderPresent(renderer);
 	}
 
@@ -84,19 +82,19 @@ bool SnakeGame::execute() {
 }
 
 
-bool SnakeGame::finalize() {
+bool Game::finalize() {
 	m_gameWindow.free();
 	return true;
 }
 
 
-void SnakeGame::clearScreen() {
+void Game::clearScreen() {
 	SDL_Renderer *renderer = m_gameWindow.renderer();
 	SDL_SetRenderDrawColor(renderer, 0xFF, 0xFF, 0xFF, 0xFF);
 	SDL_RenderClear(renderer);
 }
 
 
-void SnakeGame::resize(int width, int height) {
+void Game::resize(int width, int height) {
 	return;
 }

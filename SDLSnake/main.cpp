@@ -1,9 +1,9 @@
-#include "SnakeGame.h"
+#include "Game.h"
 
 
 
 int main(int argv, char *argc[]) {
-	SnakeGame game;
+	Game game;
 
 	if (!game.init()) {
 		return 1;

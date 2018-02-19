@@ -1,85 +1,43 @@
 #include "Snake.h"
 
 
-const int Snake::s_step = 64;
-int Snake::s_size = 1;
-
-Snake::Snake() :
-	m_posX(0),
-	m_posY(0),
-	m_velX(0),
-	m_velY(0),
-	m_width(0),
-	m_height(0),
-	m_velocityMultiplier(1),
-	m_isHead(true),
-	m_nextPart(nullptr),
-	m_previousPart(nullptr) {}
-
-
-Snake::Snake(int x, int y) :
-	m_posX(x),
-	m_posY(y),
-	m_velX(0),
-	m_velY(0),
-	m_width(0),
-	m_height(0),
-	m_velocityMultiplier(1),
-	m_isHead(true),
-	m_nextPart(nullptr),
-	m_previousPart(nullptr) {}
-
-
-Snake::~Snake() {
-	delete m_nextPart;
-	delete m_previousPart;
+Snake::Snake() {
+	m_size = 0;
 }
 
 
+Snake::~Snake() {}
+
+
 void Snake::handleEvent(const SDL_Event &e) {
-	if (e.type == SDL_KEYDOWN && m_isHead) {
-		switch (e.key.keysym.sym) {
-		case SDLK_UP:
-			m_velY = -1 * m_velocityMultiplier;
-			m_velX = 0;
-			break;
+	m_parts[0]->handleEvent(e);
+}
 
-		case SDLK_DOWN:
-			m_velY = 1 * m_velocityMultiplier;
-			m_velX = 0;
-			break;
 
-		case SDLK_LEFT:
-			m_velX = -1 * m_velocityMultiplier;
-			m_velY = 0;
-			break;
+void Snake::loadHeadTexture(std::string path, SDL_Renderer *renderer) {
+	m_headTexture.loadFromFile(path, renderer);
+	m_headTexture.setDimensions(TEXTURE_SIZE, TEXTURE_SIZE);
+}
 
-		case SDLK_RIGHT:
-			m_velX = 1 * m_velocityMultiplier;
-			m_velY = 0;
-			break;
 
-		default:
-			break;
+void Snake::loadBodyTexture(std::string path, SDL_Renderer *renderer) {
+	m_bodyTexture.loadFromFile(path, renderer);
+	m_bodyTexture.setDimensions(TEXTURE_SIZE, TEXTURE_SIZE);
+}
+
+
+void Snake::render(SDL_Renderer *renderer) const {
+	for (SnakePart const *part : m_parts) {
+		if (part->isHead()) {
+			part->render(m_headTexture, renderer);
+		} else {
+			part->render(m_bodyTexture, renderer);
 		}
 	}
 }
 
 
-void Snake::loadTexture(std::string path, SDL_Renderer *renderer) {
-	m_texture.loadFromFile(path, renderer);
-	m_height = m_texture.getHeight();
-	m_width = m_texture.getWidth();
-	initColliders();
-}
-
-
-void Snake::render(SDL_Renderer *renderer) const {
-	m_texture.render(renderer, m_posX, m_posY);
-}
-
-
-void Snake::move(Food &food) {
+void Snake::move() {
 	// Start timer if it is stopped
 	if (!m_timer.isStarted()) {
 		m_timer.start();
@@ -92,98 +50,44 @@ void Snake::move(Food &food) {
 
 	// Reset timer
 	m_timer.stop();
+	Loc prevPosition = { 0, 0 };
 
-	// If part is head
-	if (m_isHead) {
-		// Move horizontally
-		m_posX += m_velX * s_step;
-		shiftColliders();
-
-		// If reached wall
-		if (m_posX < 0 || m_posX + m_width > SCREEN_WIDTH) {
-			m_posX -= m_velX * s_step;
-			shiftColliders();
-			m_velX = 0;
-		}
-
-		// Move vertically
-		m_posY += m_velY * s_step;
-		shiftColliders();
-
-		// If reached wall
-		if (m_posY < 0 || m_posY + m_height > SCREEN_HEIGHT) {
-			m_posY -= m_velY * s_step;
-			shiftColliders();
-			m_velY = 0;
-		}
-
-		if (checkCollision(food)) {
-			food.despawn();
-		}
+	for (SnakePart *part : m_parts) {
+		part->move(prevPosition);
+		prevPosition = part->getPrevPosition();
 	}
 
-	/*
-	TODO: Implement body movement
-	*/
 	// Restart timer
 	m_timer.start();
 }
 
 
-void Snake::growth() {
-	/*
-	TODO: Implement snake growth
-	*/
-}
-
-
-bool Snake::checkCollision(const Snake &body) const {
-	return false;
-}
-
-
-bool Snake::checkCollision(const Food &food) const {
-	const SDL_Rect &a = m_collider;
-	const SDL_Rect &b = food.getColliders();
-	// The sides of rectangles
-	int leftA, leftB;
-	int rightA, rightB;
-	int topA, topB;
-	int bottomA, bottomB;
-	// Calculate the sides of rectA
-	leftA = a.x;
-	rightA = a.x + a.w;
-	topA = a.y;
-	bottomA = a.y + a.h;
-	// Calculate the sides of rectB
-	leftB = b.x;
-	rightB = b.x + b.w;
-	topB = b.y;
-	bottomB = b.y + b.h;
-
-	// If any of the sides of A are outside of B
-	if (bottomA <= topB || bottomB <= topA ||
-	    rightA <= leftB || rightB <= leftA) {
-		return false;
+void Snake::spawn(int x, int y) {
+	if (m_size != 0) {
+		printf("Snake size is not 0! Nothing to spawn.\n");
+		return;
 	}
 
-	return true;
+	SnakePart *newPart = new SnakePart(x, y, true);
+	m_parts.push_back(newPart);
+	m_size++;
 }
 
 
-const SDL_Rect &Snake::getColliders() const {
-	return m_collider;
+void Snake::growth() {
+	if (m_size == 0) {
+		printf("No head! Nothing to grow\n");
+		return;
+	}
+
+	SnakePart *prevPart = m_parts.back();
+	Loc prevLoc = prevPart->getPrevPosition();
+	SnakePart *newPart = new SnakePart(prevLoc.x, prevLoc.y);
+	m_parts.push_back(newPart);
+	m_size++;
 }
 
 
-void Snake::initColliders() {
-	m_collider.h = m_height;
-	m_collider.w = m_width;
-	shiftColliders();
+std::vector<SnakePart *> &Snake::getEntities() {
+	return m_parts;
 }
-
-void Snake::shiftColliders() {
-	m_collider.x = m_posX;
-	m_collider.y = m_posY;
-}
-

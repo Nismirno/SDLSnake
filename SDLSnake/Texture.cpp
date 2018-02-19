@@ -104,6 +104,12 @@ void Texture::setAlpha(uint8_t alpha) {
 }
 
 
+void Texture::setDimensions(int w, int h) {
+	m_width = w;
+	m_height = h;
+}
+
+
 void Texture::render(SDL_Renderer *renderer, int x, int y,
                      const SDL_Rect *clip, double angle,
                      const SDL_Point *center, SDL_RendererFlip flip) const {
@@ -127,4 +133,9 @@ int Texture::getWidth() const {
 
 int Texture::getHeight() const {
 	return m_height;
+}
+
+
+bool Texture::isLoaded() const {
+	return m_texture != NULL;
 }

@@ -5,6 +5,8 @@
 #include <string>
 #include <SDL_image.h>
 
+#include "Globals.h"
+
 class Texture {
 public:
 	// Initialize variables
@@ -34,6 +36,9 @@ public:
 	// Set alpha modulation
 	void setAlpha(uint8_t alpha);
 
+	// Set dimensions
+	void setDimensions(int w, int h);
+
 	// Renders texture at given point
 	void render(SDL_Renderer *renderer,
 	            int x,
@@ -46,6 +51,9 @@ public:
 	// Gets image dimension
 	int getWidth() const;
 	int getHeight() const;
+
+	// Is texture loaded
+	bool isLoaded() const;
 
 private:
 	// The actual hardware texture

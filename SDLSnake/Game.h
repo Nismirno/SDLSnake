@@ -1,6 +1,6 @@
 #pragma once
-#ifndef _SNAKEGAME_H
-#define _SNAKEGAME_H
+#ifndef _GAME_H
+#define _GAME_H
 
 #include <stdio.h>
 #include <SDL.h>
@@ -11,13 +11,13 @@
 //#include <SDL_opengl.h>
 //#include <gl/GLU.h>
 
-class SnakeGame {
+class Game {
 public:
 	// Initialize variables
-	SnakeGame();
+	Game();
 
 	// Deallocate memory
-	~SnakeGame();
+	~Game();
 
 	// Window resolution
 	static const int SCREEN_WIDTH = 640;
@@ -45,4 +45,4 @@ private:
 	void resize(int width, int height);
 };
 
-#endif // !_SNAKE_H
+#endif // !_GAME_H
