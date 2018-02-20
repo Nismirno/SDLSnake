@@ -37,38 +37,33 @@ void Snake::render(SDL_Renderer *renderer) const {
 }
 
 
-void Snake::move() {
-	// Start timer if it is stopped
-	if (!m_timer.isStarted()) {
-		m_timer.start();
+bool Snake::move() {
+	bool gameOver = false;
+
+	for (size_t i = 0; i < m_parts.size(); i++) {
+		if (i > 0) {
+			Loc previousPos = m_parts[i - 1]->getPrevPosition();
+			m_parts[i]->move(previousPos);
+		}
+
+		if (i == 0) {
+			gameOver = m_parts[i]->move();
+		}
 	}
 
-	// Wait one second to move
-	if (m_timer.getTicks() < 1000) {
-		return;
-	}
-
-	// Reset timer
-	m_timer.stop();
-	Loc prevPosition = { 0, 0 };
-
-	for (SnakePart *part : m_parts) {
-		part->move(prevPosition);
-		prevPosition = part->getPrevPosition();
-	}
-
+	return gameOver;
 	// Restart timer
-	m_timer.start();
+	// m_timer.start();
 }
 
 
-void Snake::spawn(int x, int y) {
+void Snake::spawn(Loc spawnLoc) {
 	if (m_size != 0) {
 		printf("Snake size is not 0! Nothing to spawn.\n");
 		return;
 	}
 
-	SnakePart *newPart = new SnakePart(x, y, true);
+	SnakePart *newPart = new SnakePart(spawnLoc.x, spawnLoc.y, true);
 	m_parts.push_back(newPart);
 	m_size++;
 }

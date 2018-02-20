@@ -2,6 +2,8 @@
 #ifndef _SNAKE_H
 #define _SNAKE_H
 
+#include <vector>
+
 #include "Texture.h"
 #include "Globals.h"
 #include "Timer.h"
@@ -26,16 +28,18 @@ public:
 	void render(SDL_Renderer *renderer) const;
 
 	// Move snake
-	void move();
+	bool move();
 
 	// Spawn head
-	void spawn(int x, int y);
+	void spawn(Loc spawnLoc);
 
 	// Snake's growth
 	void growth();
 
 	// Get entities
 	std::vector<SnakePart *> &getEntities();
+
+
 
 private:
 	// Snake textures

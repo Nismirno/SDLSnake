@@ -53,37 +53,31 @@ void SnakePart::render(const Texture &texture, SDL_Renderer *renderer) const {
 
 
 bool SnakePart::move(Loc location) {
+	bool gameOver = false;
+
 	if (m_isHead) {
 		// Safe previous position
-		m_prevPosition.x = m_position.x;
-		m_prevPosition.y = m_position.y;
+		m_prevPosition = m_position;
 		m_position.x += m_velocity.x * m_stepSize;
 		shiftCollider();
 
 		if (m_position.x < 0 || m_position.x + m_collider.w > SCREEN_WIDTH) {
-			return false;
+			gameOver = true;
 		}
 
 		m_position.y += m_velocity.y * m_stepSize;
 		shiftCollider();
 
-		if (m_position.y > 0 || m_position.y + m_collider.h > SCREEN_HEIGHT) {
-			return false;
+		if (m_position.y < 0 || m_position.y + m_collider.h > SCREEN_HEIGHT) {
+			gameOver = true;
 		}
 
-		return true;
+		return gameOver;
 	} else {
+		m_prevPosition = m_position;
 		m_position = location;
 		shiftCollider();
 	}
 
-	return true;
-}
-
-
-void SnakePart::shiftCollider() {
-	m_collider.h = TEXTURE_SIZE;
-	m_collider.w = TEXTURE_SIZE;
-	m_collider.x = m_position.x;
-	m_collider.y = m_position.y;
+	return gameOver;
 }

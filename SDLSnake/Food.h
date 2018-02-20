@@ -7,8 +7,9 @@
 
 #include "Texture.h"
 #include "Globals.h"
+#include "Entity.h"
 
-class Food {
+class Food : public Entity {
 public:
 	// Initialize members
 	Food();
@@ -20,7 +21,7 @@ public:
 	void loadTexture(std::string path, SDL_Renderer *renderer);
 
 	// Spawn food
-	void spawn();
+	void spawn(Loc spawnLoc);
 
 	// Despawn food
 	void despawn();
@@ -31,30 +32,13 @@ public:
 	// Render texture
 	void render(SDL_Renderer *renderer);
 
-	// Get colliders
-	const SDL_Rect &getColliders() const;
-
 private:
 	// Food texture
 	Texture m_texture;
 
-	// Position of food
-	int m_posX, m_posY;
-
-	// Dimensions
-	int m_width, m_height;
-
 	// Spawn flag
 	bool m_isSpawned;
 
-	// Collision box
-	SDL_Rect m_collider;
-
-	// Initialize collider
-	void initColliders();
-
-	// Shift collider
-	void shiftColliders();
 };
 
 #endif // !_FOOD_H

@@ -5,12 +5,11 @@
 
 #include "Globals.h"
 #include "Texture.h"
-#include "Food.h"
 #include "Entity.h"
 
 #include <string>
 
-class SnakePart : Entity {
+class SnakePart : public Entity {
 public:
 	// Initialize members
 	SnakePart();
@@ -49,8 +48,6 @@ private:
 
 	// Head flag
 	bool m_isHead;
-
-	void shiftCollider();
 };
 
 #endif // !_SNAKEPART_H

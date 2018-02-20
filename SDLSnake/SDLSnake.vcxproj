@@ -119,22 +119,26 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Entity.cpp" />
     <ClCompile Include="Food.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Snake.cpp" />
-    <ClCompile Include="SnakeGame.cpp" />
+    <ClCompile Include="Game.cpp" />
+    <ClCompile Include="SnakePart.cpp" />
     <ClCompile Include="Texture.cpp" />
-    <ClCompile Include="Tile.cpp" />
+    <ClCompile Include="Grid.cpp" />
     <ClCompile Include="Timer.cpp" />
     <ClCompile Include="Window.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Entity.h" />
     <ClInclude Include="Food.h" />
     <ClInclude Include="Globals.h" />
     <ClInclude Include="Snake.h" />
-    <ClInclude Include="SnakeGame.h" />
+    <ClInclude Include="Game.h" />
+    <ClInclude Include="SnakePart.h" />
     <ClInclude Include="Texture.h" />
-    <ClInclude Include="Tile.h" />
+    <ClInclude Include="Grid.h" />
     <ClInclude Include="Timer.h" />
     <ClInclude Include="Window.h" />
   </ItemGroup>

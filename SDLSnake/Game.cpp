@@ -49,13 +49,12 @@ bool Game::init() {
 bool Game::execute() {
 	SDL_Renderer *renderer = m_gameWindow.renderer();
 	bool quit = false;
+	bool gameOver = false;
 	SDL_Event e;
-	Snake *snake = new Snake();
-	snake->loadHeadTexture("media/body.png", renderer);
-	snake->loadBodyTexture("media/body.png", renderer);
-	snake->spawn(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2);
-	Food food;
-	food.loadTexture("media/food.png", renderer);
+	Texture gameOverTexture;
+	gameOverTexture.loadFromFile("media/gameOver.png", renderer);
+	Grid grid;
+	grid.create(renderer);
 
 	while (!quit) {
 		while (SDL_PollEvent(&e)) {
@@ -68,13 +67,18 @@ bool Game::execute() {
 			}
 
 			m_gameWindow.handleEvent(e);
-			snake->handleEvent(e);
+			grid.handleEvent(e);
 		}
 
-		snake->move();
 		clearScreen();
-		snake->render(renderer);
-		//		food.render(renderer);
+
+		if (!gameOver) {
+			gameOver = grid.updateGrid();
+			grid.render(renderer);
+		} else {
+			gameOverTexture.render(renderer, 0, 0);
+		}
+
 		SDL_RenderPresent(renderer);
 	}
 

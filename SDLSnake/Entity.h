@@ -11,7 +11,7 @@ class Entity {
 public:
 	Entity();
 	Entity(int x, int y, bool isFood = false);
-	~Entity();
+	virtual ~Entity();
 
 	inline SDL_Rect getCollider() const {
 		return m_collider;
@@ -29,6 +29,8 @@ protected:
 	SDL_Rect m_collider;
 
 	bool m_isFood;
+
+	void shiftCollider();
 };
 
 #endif // !_ENTITY_H

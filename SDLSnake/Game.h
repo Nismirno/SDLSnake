@@ -6,8 +6,7 @@
 #include <SDL.h>
 #include <SDL_image.h>
 #include "Window.h"
-#include "Snake.h"
-#include "Timer.h"
+#include "Grid.h"
 //#include <SDL_opengl.h>
 //#include <gl/GLU.h>
 
